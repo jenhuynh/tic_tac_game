@@ -1,10 +1,11 @@
 import express from "express";
 import mime from "mime-types";
 
+import userRouter from "./userRouter.mjs";
 import taskRouter from "./taskRouter.mjs";
 
 const app = express();
-
+app.use("/api/users", userRouter);
 app.use("/api/tasks", taskRouter);
 
 // Do not comment out or delete this end point. The React development server
