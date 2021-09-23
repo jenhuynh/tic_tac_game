@@ -1,0 +1,3 @@
+CREATE TABLE tictactoe (ID int generated always as identity, Player_Name text, X_or_O text, Number_of_Wins int);
+
+INSERT INTO tictactoe (Player_Name, X_or_O, Number_of_Wins) VALUES ('Jen Huynh', 'X', '6'), ('Natalie Bencomo', 'O', '5'), ('Zelma Sedano', 'X', '12'), ('Sarah Graywood', 'O', '8');
