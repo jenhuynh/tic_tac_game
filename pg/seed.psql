@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.3
--- Dumped by pg_dump version 13.3
+-- Dumped from database version 13.4
+-- Dumped by pg_dump version 13.4
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -51,6 +51,32 @@ ALTER SEQUENCE public.tasks_id_seq OWNED BY public.tasks.id;
 
 
 --
+-- Name: tictactoe; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tictactoe (
+    id integer NOT NULL,
+    player_name text,
+    x_or_o text,
+    number_of_wins integer
+);
+
+
+--
+-- Name: tictactoe_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.tictactoe ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.tictactoe_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: tasks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -71,10 +97,29 @@ COPY public.tasks (id, name) FROM stdin;
 
 
 --
+-- Data for Name: tictactoe; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.tictactoe (id, player_name, x_or_o, number_of_wins) FROM stdin;
+1	Jen Huynh	X	6
+2	Natalie Bencomo	O	5
+3	Zelma Sedano	X	12
+4	Sarah Graywood	O	8
+\.
+
+
+--
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.tasks_id_seq', 5, true);
+
+
+--
+-- Name: tictactoe_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tictactoe_id_seq', 4, true);
 
 
 --
