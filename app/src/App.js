@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+import LeaderBoard from "./LeaderBoard";
 import SquareComponent from "./SquareComponent";
+import * as apiClient from "./apiClient";
 
 // clears all the square values
 const clearState = ["", "", "", "", "", "", "", "", "", ""];
@@ -9,6 +11,12 @@ const clearState = ["", "", "", "", "", "", "", "", "", ""];
 
 // App Component
 function App() {
+  //useState for users
+  const [users, setUsers] = React.useState([]);
+  const loadUsers = async () => {
+    setUsers(await apiClient.getUsers());
+  };
+
   // Two States: 1) gameState, 2) isXChange
   //**  determines the winner?************************************************************???
   const [gameState, updateGameState] = useState(clearState);
@@ -21,7 +29,7 @@ function App() {
     let strings = Array.from(gameState);
     // ** checks the array from gameState, if it has the index, just return*****************???
     if (strings[index]) return;
-    strings[index] = isXChange ? "X" : "0";
+    strings[index] = isXChange ? "X" : "O";
     updateIsXChange(!isXChange);
     updateGameState(strings);
   };
@@ -30,10 +38,11 @@ function App() {
     updateGameState(clearState);
   };
   useEffect(() => {
+    loadUsers();
     let winner = checkWinner();
     if (winner) {
       clearGame();
-      alert(`Ta da ! ${winner} won the Game !`);
+      alert(`You ${winner} won the Game !`);
     }
   }, [gameState]);
 
@@ -70,6 +79,8 @@ function App() {
   return (
     <div className="app-header">
       <p className="heading-text">Tic-Tac-Toe</p>
+      <UsersList users={users} />
+      <LeaderBoard />
       <div className="row jc-center">
         <SquareComponent
           className="b-bottom-right"
@@ -123,9 +134,33 @@ function App() {
       <button className="clear-button" onClick={clearGame}>
         Clear Game
       </button>
-      <p className="fc-aqua fw-600">Zelma, Ink.</p>
     </div>
   );
 }
+
+const UsersList = ({ users }) => (
+  <>
+    <h2>Users</h2>
+    <table className="center">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Player Name</th>
+          <th>X or O</th>
+          <th>Number of Wins</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map(({ id, player_name, x_or_o, number_of_wins }) => (
+          <tr key={id}>
+            <td>{player_name}</td>
+            <td>{x_or_o}</td>
+            <td>{number_of_wins}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </>
+);
 
 export default App;
