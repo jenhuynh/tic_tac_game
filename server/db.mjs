@@ -8,6 +8,9 @@ export const getTasks = () => db.any("SELECT * FROM tasks");
 export const addTask = (name) =>
   db.one("INSERT INTO tasks(name) VALUES(${name}) RETURNING *", { name });
 
+// select from the table top 5 in descending order
+export const getTopFive = () => db.any("")
+
 function initDb() {
   let connection;
 
