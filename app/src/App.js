@@ -13,18 +13,26 @@ const clearState = ["", "", "", "", "", "", "", "", "", ""];
 function App() {
   //useState for users
   const [users, setUsers] = React.useState([]);
+  //loadUsers function
   const loadUsers = async () => {
-    setUsers(await apiClient.getUsers());
+    const result = await apiClient.getUsers();
+    setUsers(result);
+    console.log(result);
   };
 
   //adduser function to reload with new list of users on the page
-  const addUsers = async () => {
+  const addUser = (user) => {
+    console.log(user);
     //getting user and making insertion into db
-    await apiClient.addUser();
-    //setting user
-    loadUsers();
+    apiClient.addUser(user).then(loadUsers);
   };
 
+  //updateScore function to change the scores
+  const updateScore = (player_name) => {
+    console.log(player_name);
+    //getting user and making insertion into db
+    apiClient.updateScore(player_name).then(loadUsers);
+  };
   //work with gameState which tracks the the winner
 
   //whatever user is the winner, add 1 to their database score
@@ -57,6 +65,7 @@ function App() {
     if (winner) {
       clearGame();
       alert(`You ${winner} won the Game !`);
+      console.log(winner);
     }
   }, [gameState]);
 
@@ -72,12 +81,12 @@ function App() {
       [0, 4, 8],
       [2, 4, 6],
     ];
-    console.log(
-      "Class: App, Function: checkWinner ==",
-      gameState[0],
-      gameState[1],
-      gameState[2],
-    );
+    // console.log(
+    //   "Class: App, Function: checkWinner ==",
+    //   gameState[0],
+    //   gameState[1],
+    //   gameState[2],
+    // );
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (
@@ -93,10 +102,10 @@ function App() {
 
   return (
     <div className="app-header">
-      <p className="heading-text">Tic-Tac-Toe</p>
+      <p className="heading-text">Tickety Tac Toe Game</p>
       <UsersList users={users} />
-      <AddUsers addUsers={addUsers} />
-      <LeaderBoard />
+      <AddUsers addUser={addUser} updateScore={updateScore} />
+      {/* <LeaderBoard /> */}
       <div className="row jc-center">
         <SquareComponent
           className="b-bottom-right"
@@ -153,35 +162,6 @@ function App() {
     </div>
   );
 }
-const AddUsers = ({ addUsers }) => {
-  const onSubmit = (event) => {
-    //stops page from reloading after submitting
-    event.preventDefault();
-    //create element form as even target
-    const form = event.currentTarget;
-    const {
-      player_name: { value: player_name },
-      x_or_o: { value: x_or_o },
-    } = form.elements;
-
-    //call method addUser and connect to API CLient and calling function for API client to make post request
-    addUsers({ player_name, x_or_o });
-    //everytimg add button is click, form is cleared
-    form.reset();
-  };
-  return (
-    <form onSubmit={onSubmit}>
-      <label htmlFor="name">
-        Name
-        <input name="player_name" placeholder="Enter name" required />
-      </label>
-      <label htmlFor="x_or_o">
-        <input name="x_or_o" placeholder="Enter X or O" required />
-      </label>
-      <button>Add Player</button>
-    </form>
-  );
-};
 
 const UsersList = ({ users }) => (
   <>
@@ -189,7 +169,6 @@ const UsersList = ({ users }) => (
     <table className="center">
       <thead>
         <tr>
-          {/* <th>Id</th> */}
           <th>Player Name</th>
           <th>X or O</th>
           <th>Number of Wins</th>
@@ -207,5 +186,63 @@ const UsersList = ({ users }) => (
     </table>
   </>
 );
+
+const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
+  const onSubmit = (event) => {
+    //onsubmit will check if it is an existing user and send them to updatescore function
+    //check if users is in the database
+
+    //if user is in database, add score
+
+    //add user if new user and update score
+
+    //winner passed down to app (either x or o)
+    let winner = checkWinner();
+    if (winner == "O") {
+      updateScore(player_name);
+      // alert(`You ${winner} won the Game !`);
+    }
+    //stops page from reloading after submitting
+    event.preventDefault();
+    //create element form as even target
+    const form = event.currentTarget;
+    const {
+      player_name: { value: player_name },
+      x_or_o: { value: x_or_o },
+    } = form.elements;
+    console.log(player_name, x_or_o);
+    //call method addUser and connect to API CLient and calling function for API client to make post request
+    addUser({ player_name, x_or_o });
+
+    //call adduser when you updateScore
+
+    //everytimg add button is click, form is cleared
+    form.reset();
+  };
+  return (
+    <>
+      <form onSubmit={onSubmit}>
+        <label htmlFor="name">
+          Name
+          <input name="player_name" placeholder="Enter name" required />
+        </label>
+        <label htmlFor="x_or_o">
+          <input name="x_or_o" placeholder="Enter X or O" required />
+        </label>
+        <button>Add Player</button>
+      </form>
+      <form onSubmit={onSubmit}>
+        <label htmlFor="name">
+          Name
+          <input name="player_name" placeholder="Enter name" required />
+        </label>
+        <label htmlFor="x_or_o">
+          <input name="x_or_o" placeholder="Enter X or O" required />
+        </label>
+        <button>Add Player</button>
+      </form>
+    </>
+  );
+};
 
 export default App;
