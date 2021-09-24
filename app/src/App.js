@@ -17,8 +17,21 @@ function App() {
     setUsers(await apiClient.getUsers());
   };
 
-  // Two States: 1) gameState, 2) isXChange
-  //**  determines the winner?************************************************************???
+  //adduser function to reload with new list of users on the page
+  const addUsers = async () => {
+    //getting user and making insertion into db
+    await apiClient.addUser();
+    //setting user
+    loadUsers();
+  };
+
+  //work with gameState which tracks the the winner
+
+  //whatever user is the winner, add 1 to their database score
+
+  //look for players in database, if they're there, set winCounter to player's winCount then update winCounter when player wins again
+
+  // Game States: gameState, isXChange
   const [gameState, updateGameState] = useState(clearState);
   // changes X to O
   const [isXChange, updateIsXChange] = useState(false);
@@ -37,6 +50,7 @@ function App() {
   const clearGame = () => {
     updateGameState(clearState);
   };
+
   useEffect(() => {
     loadUsers();
     let winner = checkWinner();
@@ -46,6 +60,7 @@ function App() {
     }
   }, [gameState]);
 
+  //checks for winner
   const checkWinner = () => {
     const lines = [
       [0, 1, 2],
@@ -80,6 +95,7 @@ function App() {
     <div className="app-header">
       <p className="heading-text">Tic-Tac-Toe</p>
       <UsersList users={users} />
+      <AddUsers addUsers={addUsers} />
       <LeaderBoard />
       <div className="row jc-center">
         <SquareComponent
@@ -137,14 +153,43 @@ function App() {
     </div>
   );
 }
+const AddUsers = ({ addUsers }) => {
+  const onSubmit = (event) => {
+    //stops page from reloading after submitting
+    event.preventDefault();
+    //create element form as even target
+    const form = event.currentTarget;
+    const {
+      player_name: { value: player_name },
+      x_or_o: { value: x_or_o },
+    } = form.elements;
+
+    //call method addUser and connect to API CLient and calling function for API client to make post request
+    addUsers({ player_name, x_or_o });
+    //everytimg add button is click, form is cleared
+    form.reset();
+  };
+  return (
+    <form onSubmit={onSubmit}>
+      <label htmlFor="name">
+        Name
+        <input name="player_name" placeholder="Enter name" required />
+      </label>
+      <label htmlFor="x_or_o">
+        <input name="x_or_o" placeholder="Enter X or O" required />
+      </label>
+      <button>Add Player</button>
+    </form>
+  );
+};
 
 const UsersList = ({ users }) => (
   <>
-    <h2>Users</h2>
+    <h2>Leaderboard of Players</h2>
     <table className="center">
       <thead>
         <tr>
-          <th>Id</th>
+          {/* <th>Id</th> */}
           <th>Player Name</th>
           <th>X or O</th>
           <th>Number of Wins</th>
