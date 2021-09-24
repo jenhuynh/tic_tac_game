@@ -10,9 +10,16 @@ userRouter.get("/", async (request, response) => {
   response.json(users);
 });
 
+userRouter.put("/", async (request, response) => {
+  const score = await db.addScore();
+  response.json(score);
+});
+
 userRouter.use(express.json());
+
+//add user route
 userRouter.post("/", async (request, response) => {
-  const user = await db.adduser(request.body.name);
+  const user = await db.addUser(request.body.name);
   response.status(201).json(user);
 });
 
