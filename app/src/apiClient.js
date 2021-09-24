@@ -1,4 +1,4 @@
-export const getTasks = () => _get("/api/tasks");
+// export const getTasks = () => _get("/api/tasks");
 
 // export const getUsers = () => _get("/api/users");
 
@@ -7,7 +7,10 @@ export const getUsers = async () => {
   return response.json();
 };
 
-export const addTask = (name) => _post("/api/tasks", { name });
+export const addUser = ({ player_name, x_or_o }) =>
+  _post("/api/users", { player_name, x_or_o });
+
+// export const addTask = (name) => _post("/api/tasks", { name });
 
 const _get = async (url) => (await fetch(url)).json();
 
