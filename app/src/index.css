@@ -72,16 +72,24 @@ table.center {
 }
 
 .b-bottom-right {
-  border-right: 15px solid #fff8d9;
-  border-bottom: 15px solid #fff8d9;
+  border-right: 2px solid #fff8d9;
+  border-bottom: 2px solid #fff8d9;
+  margin: 20px;
 }
 
+button.square.fc-white {
+  border-right: 2px solid #fff8d9;
+  border-bottom: 2px solid #fff8d9;
+  margin: 20px;
+}
 .b-bottom {
-  border-bottom: 15px solid #fff8d9;
+  border-bottom: 2px solid #fff8d9;
+  margin: 20px;
 }
 
 .b-right {
-  border-right: 15px solid #fff8d9;
+  border-right: 2px solid #fff8d9;
+  margin: 20px;
 }
 
 .clear-button {
@@ -141,6 +149,7 @@ td {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 10px;
   }
 
   .b-bottom-right {
