@@ -10,10 +10,28 @@ export const addTask = (name) =>
 
 export const getUsers = () => db.any("SELECT * FROM tictactoe");
 
-export const addUser = ({ player_name }) =>
-  db.any(
-    "INSERT INTO tictactoe(player_name, x_or_o, number_of_wins) VALUES(${player_name}, ${x_or_o}, ${number_of_wins}) RETURNING *",
-    { player_name, x_or_o, number_of_wins },
+export const addUser = ({ player_name, x_or_no }) =>
+  db.one(
+    "INSERT INTO tictactoe(player_name, x_or_o, number_of_wins) VALUES($1, $2) RETURNING *",
+    [player_name, x_or_o, 0],
+  );
+
+// export const addPlayer = (name) =>
+//   db.one(
+//     "INSERT INTO players(name, wins, losses, ties) VALUES($1, $2, $3, $4) RETURNING *",
+//     [name, 0, 0, 0],
+//   );
+// export const addUser = ({ player_name, x_or_no, number_of_wins }) =>
+// db.one(
+//   "INSERT INTO tictactoe(player_name, x_or_o, number_of_wins) VALUES(${player_name}, ${x_or_o}, ${number_of_wins}) RETURNING *",
+//   { player_name, x_or_o, number_of_wins },
+// );
+
+//add user score by one each time
+export const addScore = ({ player_name }) =>
+  db.one(
+    "UPDATE tictactoe SET number_of_wins = number_of_wins + 1 WHERE player_name = ${player_name} RETURNING *",
+    { player_name },
   );
 
 // select from the table top 5 in descending order
