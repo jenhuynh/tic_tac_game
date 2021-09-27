@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import LeaderBoard from "./LeaderBoard";
 import SquareComponent from "./SquareComponent";
 import * as apiClient from "./apiClient";
 
@@ -13,6 +12,8 @@ const clearState = ["", "", "", "", "", "", "", "", "", ""];
 function App() {
   //useState for users
   const [users, setUsers] = React.useState([]);
+  // const [oSelected, setOSelected] = React.useState(null);
+  // const [xSelected, setXSelected] = React.useState(null);
   //loadUsers function
   const loadUsers = async () => {
     const result = await apiClient.getUsers();
@@ -29,7 +30,9 @@ function App() {
 
   //updateScore function to change the scores
   const updateScore = (player_name) => {
+    const winnerId = player_name == "X" ? users[0].users.id : users[0].users.id;
     console.log(player_name);
+    // console.log(winnerId);
     //getting user and making insertion into db
     apiClient.updateScore(player_name).then(loadUsers);
   };
@@ -63,9 +66,10 @@ function App() {
     loadUsers();
     let winner = checkWinner();
     if (winner) {
+      // console.log(winner);
       clearGame();
       alert(`You ${winner} won the Game !`);
-      console.log(winner);
+      // console.log(winner);
     }
   }, [gameState]);
 
@@ -197,11 +201,15 @@ const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
     //add user if new user and update score
 
     //winner passed down to app (either x or o)
-    let winner = checkWinner();
-    if (winner == "O") {
-      updateScore(player_name);
-      // alert(`You ${winner} won the Game !`);
-    }
+    // let winner = checkWinner();
+    // if (winner === "O") {
+    //   console.log(winner);
+    //   updateScore(users.player_name[(1, 3)]);
+    //   // alert(`You ${winner} won the Game !`);
+    // } else {
+    //   updateScore(users.player_name[(0, 3, 4)]);
+    // }
+
     //stops page from reloading after submitting
     event.preventDefault();
     //create element form as even target
@@ -213,7 +221,7 @@ const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
     console.log(player_name, x_or_o);
     //call method addUser and connect to API CLient and calling function for API client to make post request
     addUser({ player_name, x_or_o });
-
+    // updateScore({ player_name, x_or_o });
     //call adduser when you updateScore
 
     //everytimg add button is click, form is cleared
@@ -221,6 +229,7 @@ const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
   };
   return (
     <>
+      <h3>Enter Player Information</h3>
       <form onSubmit={onSubmit}>
         <label htmlFor="name">
           Name
@@ -231,7 +240,9 @@ const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
         </label>
         <button>Add Player</button>
       </form>
-      <form onSubmit={onSubmit}>
+      <h3>X or O?</h3>
+      {/* <h3>PLayer Two</h3> */}
+      {/* <form onSubmit={onSubmit}>
         <label htmlFor="name">
           Name
           <input name="player_name" placeholder="Enter name" required />
@@ -240,7 +251,7 @@ const AddUsers = ({ winner, users, addUser, updateScore, checkWinner }) => {
           <input name="x_or_o" placeholder="Enter X or O" required />
         </label>
         <button>Add Player</button>
-      </form>
+      </form> */}
     </>
   );
 };
