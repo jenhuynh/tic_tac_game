@@ -3,17 +3,16 @@ import React from "react";
 import App from "./App";
 
 function LeaderBoard({ gameState }) {
-  // const [winner, setWinner] =
   return (
     <div>
       <table className="center">
         <thead>
-          <tr>
+          {/* <tr>
             <th>Id</th>
             <th>Player Name</th>
             <th>X or O</th>
             <th>Number of Wins</th>
-          </tr>
+          </tr> */}
         </thead>
         <tbody>
           {/* {gameState.map(({ id, player_name, x_or_o, number_of_wins }) => (
